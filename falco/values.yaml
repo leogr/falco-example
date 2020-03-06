@@ -56,8 +56,8 @@ daemonset:
     type: RollingUpdate
 
   ## Extra environment variables that will be pass onto deployment pods
-  env: 
-    SYSDIG_BPF_PROBE: /lib/modules/falco-probe.o
+  # env: 
+  #   SYSDIG_BPF_PROBE: /lib/modules/falco-bpf-probe.o
   
 
 # If is behind a proxy you can set the proxy server
@@ -74,7 +74,7 @@ priorityClassName:
 
 ebpf:
   # Enable eBPF support for Falco
-  enabled: true
+  enabled: false
 
   settings:
     # Needed to enable eBPF JIT at runtime for performance reasons.
