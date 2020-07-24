@@ -6,17 +6,17 @@ KIND ?= kind
 HELM ?= helm
 PWD=$(shell pwd)
 
-FALCO_VERSION=0.20.0
+FALCO_VERSION=0.24.0
 FALCO_GIT=https://github.com/falcosecurity/falco.git
 HELM_CHART_VERSION=
-BPF_INSTALL_PATH=/lib/modules/falco-bpf-probe.o
+BPF_INSTALL_PATH/root/.falco/falco-bpf.o
 
 build/falco/build:
 	mkdir -p build && rm -rf build/falco
 	cd build && git clone https://github.com/falcosecurity/falco.git && cd falco && git checkout ${FALCO_VERSION}
 	mkdir -p build/falco/build
 	cd build/falco/build && \
-		cmake -DSYSDIG_VERSION=be1ea2d9482d0e6e2cb14a0fd7e08cbecf517f94 -DBUILD_BPF=ON ..
+		cmake -DCMAKE_BUILD_TYPE=Release ..
 
 build/falco/build/driver/bpf/probe.o:
 	cd build/falco/build && make bpf
@@ -27,7 +27,7 @@ build/falco/build/driver/probe.o:
 
 .PHONY: install/driver/bpf
 install/bpf: build/falco/build/driver/bpf/probe.o
-	sudo cp build/falco/build/driver/bpf/probe.o ${BPF_INSTALL_PATH}
+	ln -sf build/falco/build/driver/bpf/probe.o ${BPF_INSTALL_PATH}
 
 .PHONY: install/driver
 install/driver: build/falco/build
@@ -35,7 +35,9 @@ install/driver: build/falco/build
 
 .PHONY: deploy/falco
 deploy/falco:
-	$(HELM) install falco stable/falco -f ./falco/values.yaml 
+	$(HELM) repo add falcosecurity https://falcosecurity.github.io/charts
+	$(HELM) repo update
+	$(HELM) install falco falcosecurity/falco
 
 .PHONY: kind/cluster
 kind/cluster:
