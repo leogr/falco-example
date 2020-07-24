@@ -17,3 +17,5 @@ nodes:
   extraMounts:
   - hostPath: /dev
     containerPath: /dev
+  - hostPath: /tmp/falco
+    containerPath: /var/run/falco
