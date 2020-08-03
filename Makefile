@@ -9,7 +9,7 @@ PWD=$(shell pwd)
 FALCO_VERSION=0.24.0
 FALCO_GIT=https://github.com/falcosecurity/falco.git
 HELM_CHART_VERSION=
-BPF_INSTALL_PATH/root/.falco/falco-bpf.o
+BPF_INSTALL_PATH=/root/.falco/falco-bpf.o
 
 build/falco/build:
 	mkdir -p build && rm -rf build/falco
